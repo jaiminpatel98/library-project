@@ -9,7 +9,7 @@ import {
 import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCwMGzeAnjv8DIXIDt7pEc3zGwG4H00NAM",
+  apiKey: "x",
   authDomain: "library-project-55fa5.firebaseapp.com",
   projectId: "library-project-55fa5",
   appId: "1:308317306257:web:7507cb8a68657d4a48ee30",
