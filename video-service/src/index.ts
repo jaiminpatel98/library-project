@@ -1,6 +1,13 @@
 import express from 'express';
-import { convertVideo, deleteProcessedVideo, deleteRawVideo, downloadRawVideo, setupDirectories, uploadProcessedVideo } from './gcStorage';
-import { inflate } from 'zlib';
+import { 
+  convertVideo, 
+  deleteProcessedVideo,
+  deleteRawVideo,
+  downloadRawVideo,
+  setupDirectories,
+  uploadProcessedVideo
+} from './gcStorage';
+import { isVideoNew, setVideo } from './firestore';
 
 const ffmpegStatic = require('ffmpeg-static');
 const ffmpeg = require('fluent-ffmpeg');
@@ -27,6 +34,17 @@ app.post('/process-video', async (req, res) => {
 
   const inFileName = data.name;
   const outFileName = `processed-${inFileName}`;
+  const videoId = inFileName.split('.')[0];
+
+  if (!isVideoNew(videoId)) {
+    return res.status(400).send('Bad Request: Video already entered processing');
+  } else {
+    await setVideo(videoId, {
+      id: videoId,
+      uid: videoId.split('-')[0],
+      status: 'processing',
+    });
+  }
 
   // Download raw video from CS
   await downloadRawVideo(inFileName);
@@ -44,6 +62,11 @@ app.post('/process-video', async (req, res) => {
 
   // Upload the processed video to CS
   await uploadProcessedVideo(outFileName);
+
+  await setVideo(videoId, {
+    status: 'processed',
+    fileName: outFileName
+  });
 
   await Promise.all([
     deleteRawVideo(inFileName),
