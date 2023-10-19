@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { 
   getAuth,
   signInWithPopup,
@@ -7,6 +6,7 @@ import {
   onAuthStateChanged,
   User
 } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCwMGzeAnjv8DIXIDt7pEc3zGwG4H00NAM",
@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const auth = getAuth(app);
+export const functions = getFunctions();
 
 
 /**
