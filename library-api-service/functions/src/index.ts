@@ -62,3 +62,17 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
     await firestore.collection(videoCollectionId).limit(10).get();
   return querySnapshot.docs.map((doc) => doc.data());
 });
+
+export const setVideo = onCall({maxInstances: 1}, async (request) => {
+  if (!request.auth) {
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "Function must be called while user is authenticated."
+    );
+  }
+  const data = request.data;
+  return firestore
+    .collection(videoCollectionId)
+    .doc(data.videoId)
+    .set(data.video, {merge: true});
+});
