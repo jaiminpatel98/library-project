@@ -12,7 +12,7 @@ export interface Video {
   id?: string,
   uid?: string,
   fileName?: string,
-  status?: 'processing' | 'processed',
+  status?: "processing" | "processed",
   title?: string,
   description?: string,
   date?: string
