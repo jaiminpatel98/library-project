@@ -4,7 +4,7 @@ import Image from 'next/image';
 import styles from './navbar.module.css';
 import Link from 'next/link';
 import SignIn from './sign-in';
-import UploadForm from '../uploadform/uploadform';
+import UploadForm from '../upload-form/upload-form';
 import { onAuthStateChangedHelper } from '../utilities/firebase/firebase';
 import { useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
