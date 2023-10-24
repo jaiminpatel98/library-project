@@ -15,11 +15,11 @@ export default function SignIn(props: SignInProps) {
     <Fragment>
       { props.user ?
         (
-          <button className={styles.signin} onClick={signOut}>
+          <button className="Button slate" onClick={signOut}>
             Sign Out
           </button>
         ) : (
-          <button className={styles.signin} onClick={signInWithGoogle}>
+          <button className="Button slate" onClick={signInWithGoogle}>
             Sign In
           </button>
         )
