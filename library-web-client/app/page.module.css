@@ -1,3 +1,16 @@
 .thumbnail {
+  border-radius: 8%;
+}
+
+.items {
+  display: inline-flex;
+  margin: 2.5% 5% 5% 5%;
+}
+
+.item {
   margin: 10px;
+  text-decoration: none;
+}
+.item:hover {
+  text-decoration: underline;
 }

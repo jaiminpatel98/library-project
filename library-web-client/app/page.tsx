@@ -8,14 +8,17 @@ export default async function Home() {
   console.log(videos);
   return (
     <main>
+      <div className={styles.items}>
       {
         videos.map((video) => (
-          <Link href={`/watch?v=${video.fileName}`} key={video.id}>
-            <Image width={240} height={160} className={styles.thumbnail}
-              src={'/thumbnail.png'} alt='Play Button Thumbnail'/>
-          </Link>
+            <Link href={`/watch?v=${video.fileName}`} key={video.id} className={styles.item}>
+              <Image width={240} height={160} className={styles.thumbnail}
+                src={'/thumbnail.png'} alt='Play Button Thumbnail'/>
+              <p className='FileTitle'>{video.title}</p>
+            </Link>
         ))
       }
+      </div>
     </main>
   )
 }
