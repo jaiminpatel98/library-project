@@ -10,17 +10,8 @@ initializeApp();
 const firestore = new Firestore();
 const storage = new Storage();
 const rawVideoBucketName = "library-raw-videos";
-const videoCollectionId = "videos";
-
-export interface Video {
-  id?: string,
-  uid?: string,
-  fileName?: string,
-  status?: "processing" | "processed",
-  title?: string,
-  description?: string,
-  date?: string
-}
+const audioBucketName = "library-audios";
+const mediaCollectionId = "media";
 
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
@@ -45,7 +36,9 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 
   const auth = request.auth;
   const data = request.data;
-  const bucket = storage.bucket(rawVideoBucketName);
+  const bucket = storage.bucket(
+    data.type === "video" ? rawVideoBucketName : audioBucketName
+  );
 
   const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
   const [url] = await bucket.file(fileName).getSignedUrl({
@@ -57,13 +50,13 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
   return {url, fileName};
 });
 
-export const getVideos = onCall({maxInstances: 1}, async () => {
+export const getMedia = onCall({maxInstances: 1}, async () => {
   const querySnapshot =
-    await firestore.collection(videoCollectionId).limit(10).get();
+    await firestore.collection(mediaCollectionId).limit(10).get();
   return querySnapshot.docs.map((doc) => doc.data());
 });
 
-export const setVideo = onCall({maxInstances: 1}, async (request) => {
+export const setMedia = onCall({maxInstances: 1}, async (request) => {
   if (!request.auth) {
     throw new functions.https.HttpsError(
       "failed-precondition",
@@ -72,7 +65,7 @@ export const setVideo = onCall({maxInstances: 1}, async (request) => {
   }
   const data = request.data;
   return firestore
-    .collection(videoCollectionId)
-    .doc(data.videoId)
-    .set(data.video, {merge: true});
+    .collection(mediaCollectionId)
+    .doc(data.mediaId)
+    .set(data.media, {merge: true});
 });
