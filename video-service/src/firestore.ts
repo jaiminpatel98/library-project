@@ -6,7 +6,7 @@ initializeApp({credential: credential.applicationDefault()});
 
 const firestore = new Firestore();
 
-const videoCollectionId = 'videos';
+const mediaCollectionId = 'media';
 
 export interface Video {
   id?: string,
@@ -23,7 +23,7 @@ export interface Video {
  * @returns Video document data OR empty object
  */
 async function getVideo(videoId: string) {
-  const snapshot = await firestore.collection(videoCollectionId).doc(videoId).get();
+  const snapshot = await firestore.collection(mediaCollectionId).doc(videoId).get();
   return ((snapshot.data() as Video) ?? {});
 }
 
@@ -34,7 +34,7 @@ async function getVideo(videoId: string) {
  */
 export function setVideo(videoId: string, video: Video) {
   return firestore
-    .collection(videoCollectionId)
+    .collection(mediaCollectionId)
     .doc(videoId)
     .set(video, { merge: true })
 }
