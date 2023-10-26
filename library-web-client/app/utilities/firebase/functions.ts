@@ -3,39 +3,30 @@ import { functions } from "./firebase";
 
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
-const getVideosFunction = httpsCallable(functions, 'getVideos');
-const setVideoFunction = httpsCallable(functions, 'setVideo');
+const getMediaFunction = httpsCallable(functions, 'getMedia');
+const setMediaFunction = httpsCallable(functions, 'setMedia');
 
-export interface Video {
-  id?: string,
-  uid?: string,
-  fileName?: string,
-  status?: "processing" | "processed",
-  title?: string,
-  description?: string,
-  date?: number
-}
-
-export async function uploadVideo(file: File, title: string | undefined, description: string | undefined) {
+export async function uploadMedia(file: File, title: string | undefined, description: string | undefined) {
   const response: any = await generateUploadUrl({
-    fileExtension: file.name.split('.').pop()
+    fileExtension: file.name.split('.').pop(),
+    fileType: file.type.split('/')[0]
   });
 
   const fileName = response?.data?.fileName
-  const videoId = fileName.split('.')[0];
-  const video = {
-    id: videoId,
-    uid: videoId.split('-')[0],
+  const mediaId = fileName.split('.')[0];
+  const media: Media = {
+    id: mediaId,
+    uid: mediaId.split('-')[0],
     fileName: fileName,
-    status: "processing",
+    status: file.type.split('/')[0] === 'audio' ? 'processed' : 'processing',
     title: title,
     description: description,
     date: Date.now()
   }
 
-  await setVideoFunction({
-    videoId: videoId,
-    video: video as Video
+  await setMediaFunction({
+    mediaId: mediaId,
+    media: media
   })
 
   const uploadResult = await fetch(response?.data?.url, {
@@ -49,7 +40,7 @@ export async function uploadVideo(file: File, title: string | undefined, descrip
   return uploadResult;
 }
 
-export async function getVideos() {
-  const response = await getVideosFunction();
-  return response.data as Video[];
+export async function getMedia() {
+  const response = await getMediaFunction();
+  return response.data as Media[];
 }

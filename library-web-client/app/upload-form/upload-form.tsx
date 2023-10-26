@@ -1,7 +1,7 @@
 'use client';
 import React,  { Fragment, useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
-import { uploadVideo } from "../utilities/firebase/functions";
+import { uploadMedia } from "../utilities/firebase/functions";
 import { Cross2Icon } from '@radix-ui/react-icons';
 import UploadInput from '../components/upload-input';
 import styles from "./upload-form.module.css";
@@ -33,7 +33,8 @@ export default function UploadForm() {
     try {
       //TODO: conditionally call upload function based on media type - video, audio, image
       //TODO: Establish interfaces as global types - Video, Upload - then we can just send upload interface to the function
-      const response = await uploadVideo(file, title, description);
+      //TODO: Replace reponse feedback with styled toasts or similar
+      const response = await uploadMedia(file, title, description);
       alert(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
     } catch (error) {
       alert(`Failed to upload file: ${error}`);

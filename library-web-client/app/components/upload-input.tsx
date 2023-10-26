@@ -34,7 +34,7 @@ export default function UploadInput({ stateChanger }: any) {
       </label>
       {
         !fileName &&
-        <input id="upload" className={styles.uploadInput} type="file" accept="video/*"
+        <input id="upload" className={styles.uploadInput} type="file" accept="video/*|audio/*|image/*"
           onChange={handleFileChange} />
       }
       <p>{fileName}</p>
