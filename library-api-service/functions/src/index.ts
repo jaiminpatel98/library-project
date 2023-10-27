@@ -37,7 +37,7 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
   const auth = request.auth;
   const data = request.data;
   const bucket = storage.bucket(
-    data.type === "video" ? rawVideoBucketName : audioBucketName
+    data.fileType === "video" ? rawVideoBucketName : audioBucketName
   );
 
   const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
