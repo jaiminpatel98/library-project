@@ -5,6 +5,7 @@ interface Media {
   status?: "processed" | "processing",
   title?: string,
   description?: string,
+  type?: string,
   date?: number
 };
 
