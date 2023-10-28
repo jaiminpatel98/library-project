@@ -11,7 +11,10 @@ export default async function Home() {
       <div className={styles.items}>
       {
         media.map((media) => (
-            <Link href={`/watch?v=${media.fileName}`} key={media.id} className={styles.item}>
+            <Link 
+              href={`/watch?${media.type === 'video' ? 'v' : media.type === 'image' ? 'i' : 'a'}=${media.fileName}`} 
+              key={media.id} className={styles.item}
+            >
               <Image width={240} height={160} className={styles.thumbnail}
                 src={'/thumbnail.png'} alt='Play Button Thumbnail'/>
               <p className='FileTitle'>{media.title}</p>
