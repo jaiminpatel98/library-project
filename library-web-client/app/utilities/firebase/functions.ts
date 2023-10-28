@@ -12,29 +12,34 @@ export async function uploadMedia(file: File, title: string | undefined, descrip
     fileType: file.type.split('/')[0]
   });
 
-  const fileName = response?.data?.fileName
+  const fileType = file.type.split('/')[0];
+  const fileName = response?.data?.fileName;
   const mediaId = fileName.split('.')[0];
   const media: Media = {
     id: mediaId,
     uid: mediaId.split('-')[0],
     fileName: fileName,
-    status: file.type.split('/')[0] === 'audio' ? 'processed' : 'processing',
+    status: fileType === 'video' ? 'processing' : 'processed',
     title: title,
     description: description,
+    type: fileType,
     date: Date.now()
   }
+
+  //TODO: add error handling
+  const headerConfig = {
+    'Content-Type': file.type,
+    'x-goog-acl': fileType !== 'video' ? 'public-read' : 'private'
+  }
+  const uploadResult = await fetch(response?.data?.url, {
+    method: "PUT",
+    body: file,
+    headers: headerConfig
+  });
 
   await setMediaFunction({
     mediaId: mediaId,
     media: media
-  })
-
-  const uploadResult = await fetch(response?.data?.url, {
-    method: "PUT",
-    body: file,
-    headers: {
-      'Content-Type': file.type
-    }
   });
 
   return uploadResult;
