@@ -15,6 +15,7 @@ export interface Video {
   status?: "processing" | "processed",
   title?: string,
   description?: string,
+  type?: string,
   date?: string
 }
 
