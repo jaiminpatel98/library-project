@@ -45,6 +45,9 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
     version: "v4",
     action: "write",
     expires: Date.now() + 15 * 60 * 1000,
+    extensionHeaders: {
+      "x-goog-acl": data.fileType !== "video" ? "public-read" : "private",
+    },
   });
 
   return {url, fileName};
