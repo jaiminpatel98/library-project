@@ -42,6 +42,7 @@ app.post('/process-video', async (req, res) => {
     await setVideo(videoId, {
       id: videoId,
       uid: videoId.split('-')[0],
+      type: 'video',
       status: 'processing',
     });
   }
