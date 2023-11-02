@@ -11,6 +11,7 @@ const firestore = new Firestore();
 const storage = new Storage();
 const rawVideoBucketName = "library-raw-videos";
 const audioBucketName = "library-audios";
+const imageBucketName = "library-imgs";
 const mediaCollectionId = "media";
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -37,7 +38,8 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
   const auth = request.auth;
   const data = request.data;
   const bucket = storage.bucket(
-    data.fileType === "video" ? rawVideoBucketName : audioBucketName
+    data.fileType === "video" ? rawVideoBucketName :
+      data.fileType === "audio" ? audioBucketName : imageBucketName
   );
 
   const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
