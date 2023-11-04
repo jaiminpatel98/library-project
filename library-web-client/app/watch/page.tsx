@@ -22,7 +22,7 @@ export default function Watch() {
       }
       {
         imageSrc &&
-        <img src={imagePrefix + imageSrc} />
+        <img src={imagePrefix + imageSrc} width={1080}/>
       }
     </div>
   );
