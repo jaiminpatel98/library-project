@@ -16,7 +16,10 @@ export default async function Home() {
               key={media.id} className={styles.item}
             >
               <Image width={240} height={160} className={styles.thumbnail}
-                src={'/thumbnail.png'} alt='Play Button Thumbnail'/>
+                src={media.type === 'video' ? '/video-thumbnail.png' : 
+                    media.type === 'audio' ? '/audio-thumbnail.png' : 
+                    `https://storage.googleapis.com/library-imgs/${media.fileName}`} alt='Thumbnail'
+              />
               <p className='FileTitle'>{media.title}</p>
             </Link>
         ))
