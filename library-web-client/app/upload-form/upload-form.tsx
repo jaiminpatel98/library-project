@@ -3,10 +3,12 @@ import React,  { Fragment, useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { uploadMedia } from "../utilities/firebase/functions";
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { Bars } from  'react-loader-spinner';
 import UploadInput from '../components/upload-input';
 import styles from "./upload-form.module.css";
 
 export default function UploadForm() {
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File>();
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -30,14 +32,17 @@ export default function UploadForm() {
       //TODO: Display error feed - No file was selected
       return;
     }
+    setLoading(true);
     try {
       //TODO: conditionally call upload function based on media type - video, audio, image
       //TODO: Establish interfaces as global types - Video, Upload - then we can just send upload interface to the function
       //TODO: Replace reponse feedback with styled toasts or similar
       const response = await uploadMedia(file, title, description);
       alert(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
+      setLoading(false);
     } catch (error) {
       alert(`Failed to upload file: ${error}`);
+      setLoading(false);
     }
   }
 
@@ -45,9 +50,12 @@ export default function UploadForm() {
     <Fragment>
       <Dialog.Root>
         <Dialog.Trigger asChild>
-          <button className="Button slate">
-            Upload
-          </button>
+          {
+            !loading &&
+            <button className="Button slate">
+              Upload
+            </button>
+          }
         </Dialog.Trigger>
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay" />
@@ -86,6 +94,18 @@ export default function UploadForm() {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+      {
+        loading &&
+        <Bars
+          height="80"
+          width="80"
+          color="#222222"
+          ariaLabel="bars-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      }
     </Fragment>
   )
 }
