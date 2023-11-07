@@ -61,6 +61,16 @@ export const getMedia = onCall({maxInstances: 1}, async () => {
   return querySnapshot.docs.map((doc) => doc.data());
 });
 
+export const getMediaById = onCall({maxInstances: 1}, async (request) => {
+  const data = request.data;
+  const snap = await firestore
+    .collection(mediaCollectionId)
+    .doc(data.docId)
+    .get();
+  const serialized = JSON.parse(JSON.stringify(snap.data()));
+  return serialized;
+});
+
 export const setMedia = onCall({maxInstances: 1}, async (request) => {
   if (!request.auth) {
     throw new functions.https.HttpsError(
