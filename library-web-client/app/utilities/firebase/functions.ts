@@ -4,6 +4,7 @@ import { functions } from "./firebase";
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getMediaFunction = httpsCallable(functions, 'getMedia');
+const getMediaByIdFunction = httpsCallable(functions, 'getMediaById');
 const setMediaFunction = httpsCallable(functions, 'setMedia');
 
 export async function uploadMedia(file: File, title: string | undefined, description: string | undefined) {
@@ -48,4 +49,9 @@ export async function uploadMedia(file: File, title: string | undefined, descrip
 export async function getMedia() {
   const response = await getMediaFunction();
   return response.data as Media[];
+}
+
+export async function getMediaById(docId: string) {
+  const response = await getMediaByIdFunction({docId: docId});
+  return response.data as Media;
 }
