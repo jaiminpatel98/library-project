@@ -15,7 +15,7 @@ export default async function Home() {
               href={`/watch?${media.type === 'video' ? 'v' : media.type === 'image' ? 'i' : 'a'}=${media.fileName}`} 
               key={media.id} className={styles.item}
             >
-              <Image width={240} height={160} className={styles.thumbnail}
+              <Image width={300} height={200} className={styles.thumbnail}
                 src={media.type === 'video' ? '/video-thumbnail.png' : 
                     media.type === 'audio' ? '/audio-thumbnail.png' : 
                     `https://storage.googleapis.com/library-imgs/${media.fileName}`} alt='Thumbnail'
