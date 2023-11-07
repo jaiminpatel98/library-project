@@ -57,7 +57,7 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 
 export const getMedia = onCall({maxInstances: 1}, async () => {
   const querySnapshot =
-    await firestore.collection(mediaCollectionId).limit(10).get();
+    await firestore.collection(mediaCollectionId).limit(100).get();
   return querySnapshot.docs.map((doc) => doc.data());
 });
 
