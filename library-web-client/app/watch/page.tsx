@@ -7,7 +7,7 @@ import { Bars } from  'react-loader-spinner';
 
 export default function Watch() {
   const [data, setData] = useState<Media>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const videoPrefix = 'https://storage.googleapis.com/library-processed-videos/';
   const audioPrefix = 'https://storage.googleapis.com/library-audios/';
@@ -44,23 +44,29 @@ export default function Watch() {
   
   return (
     <div className={styles.page}>
-      <h1>{data && !loading ? data.title : ''}</h1>
       {
-        videoSrc && !loading &&
-        <video controls src={videoPrefix + videoSrc}/> 
+        !loading &&
+        <div>
+          <h1>{data ? data.title : ''}</h1>
+          {
+            videoSrc &&
+            <video controls src={videoPrefix + videoSrc}/> 
+          }
+          {
+            audioSrc &&
+            <audio controls src={audioPrefix + audioSrc}/>
+          }
+          {
+            imageSrc &&
+            <img src={imagePrefix + imageSrc} width={1080}/>
+          }
+          <p>{data ? data.description : ''}</p>
+        </div>
       }
-      {
-        audioSrc && !loading &&
-        <audio controls src={audioPrefix + audioSrc}/>
-      }
-      {
-        imageSrc && !loading &&
-        <img src={imagePrefix + imageSrc} width={1080}/>
-      }
-      <p>{data && !loading ? data.description : ''}</p>
       {
         loading &&
-        <Bars
+        <div>
+          <Bars
           height="80"
           width="80"
           color="#222222"
@@ -68,7 +74,8 @@ export default function Watch() {
           wrapperStyle={{}}
           wrapperClass=""
           visible={true}
-        />
+          />
+        </div>
       }
     </div>
   );
