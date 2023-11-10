@@ -1,12 +1,16 @@
 'use client';
 import styles from './page.module.css';
+import * as Avatar from '@radix-ui/react-avatar';
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMediaById } from "../utilities/firebase/functions";
+import { getUser } from "../utilities/firebase/functions";
 import { Bars } from  'react-loader-spinner';
+import Link from 'next/link';
 
 export default function Watch() {
   const [data, setData] = useState<Media>();
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
 
   const videoPrefix = 'https://storage.googleapis.com/library-processed-videos/';
@@ -18,7 +22,7 @@ export default function Watch() {
   const docId = videoSrc ? videoSrc.split('.')[0].split('-').slice(1,3).join('-') :
                 audioSrc ? audioSrc.split('.')[0] :
                 imageSrc ? imageSrc.split('.')[0] : null;
-
+                
   useEffect(() => {
     if (docId && !data) {
       setLoading(true);
@@ -26,6 +30,18 @@ export default function Watch() {
       .then((res) => {
         if (res) {
           setData(res);
+          if (res.uid) {
+            getUserHelper(res?.uid)
+            .then((usr) => {
+              if (usr) {
+                setUser(usr);
+              }
+            })
+            .catch((error) => {
+              setLoading(false);
+              console.log(error)
+            })
+          }
           setLoading(false);
         }
         console.log(res)
@@ -41,6 +57,11 @@ export default function Watch() {
     const data = await getMediaById(docId);
     return data;
   }
+
+  const getUserHelper = async (docId: string) => {
+    const data = await getUser(docId);
+    return data;
+  }
   
   return (
     <div className={styles.page}>
@@ -48,24 +69,44 @@ export default function Watch() {
         !loading &&
         <div>
           <h1>{data ? data.title : ''}</h1>
+          <p>{data ? data.date ? 'Created: ' + new Date(data.date).toLocaleString().split(',')[0] : '' : ''}</p>
           {
             videoSrc &&
-            <video controls src={videoPrefix + videoSrc}/> 
+            <video controls src={videoPrefix + videoSrc} height={615}/> 
           }
           {
             audioSrc &&
-            <audio controls src={audioPrefix + audioSrc}/>
+            <audio controls src={audioPrefix + audioSrc} />
           }
           {
             imageSrc &&
-            <img src={imagePrefix + imageSrc} width={1080}/>
+            <img src={imagePrefix + imageSrc} height={615}/>
           }
+          <div className={styles.profile}>
+            <div>
+              <Avatar.Root className="AvatarRoot">
+                <Avatar.Image 
+                  className="AvatarImage"
+                  src={user?.photoUrl}
+                  alt={user?.name + 'profile image'}
+                />
+                <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                  {user?.name?.split(' ')[0][0]}
+                </Avatar.Fallback>
+              </Avatar.Root>
+            </div>
+            <div className={styles.nameContainer}>
+              <Link className={styles.name} href={`/user?u=${user?.uid}`} key={user?.uid}>
+                <p className="FileTitle">{user?.name}</p>
+              </Link>
+            </div>
+          </div>
           <p>{data ? data.description : ''}</p>
         </div>
       }
       {
         loading &&
-        <div>
+        <div className={styles.loading}>
           <Bars
           height="80"
           width="80"
