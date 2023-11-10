@@ -13,15 +13,17 @@ const rawVideoBucketName = "library-raw-videos";
 const audioBucketName = "library-audios";
 const imageBucketName = "library-imgs";
 const mediaCollectionId = "media";
+const usersCollectionId = "users";
 
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
     uid: user.uid,
+    name: user.displayName,
     email: user.email,
     photoUrl: user.photoURL,
   };
 
-  firestore.collection("users").doc(user.uid).set(userInfo);
+  firestore.collection(usersCollectionId).doc(user.uid).set(userInfo);
   logger.info(`User Created: ${JSON.stringify(userInfo)}`);
 
   return;
@@ -65,6 +67,16 @@ export const getMediaById = onCall({maxInstances: 1}, async (request) => {
   const data = request.data;
   const snap = await firestore
     .collection(mediaCollectionId)
+    .doc(data.docId)
+    .get();
+  const serialized = JSON.parse(JSON.stringify(snap.data()));
+  return serialized;
+});
+
+export const getUser = onCall({maxInstances: 1}, async (request) => {
+  const data = request.data;
+  const snap = await firestore
+    .collection(usersCollectionId)
     .doc(data.docId)
     .get();
   const serialized = JSON.parse(JSON.stringify(snap.data()));
