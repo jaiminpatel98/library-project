@@ -33,6 +33,14 @@ export default function Navbar() {
         {
           user && <UploadForm />
         }
+        {
+          user &&
+          <Link className={styles.name} href={`/user?u=${user?.uid}`} key={user?.uid}>
+            <button className="Button slate">
+              Profile
+            </button>
+          </Link>
+        }
         <SignIn user={user}/>
       </div>
     </nav>
