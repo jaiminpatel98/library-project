@@ -10,3 +10,11 @@ interface Media {
 };
 
 interface Video extends Media {};
+
+interface User {
+  uid: string,
+  name?: string,
+  bio?: string,
+  photoUrl?: string,
+  email?: string
+}
