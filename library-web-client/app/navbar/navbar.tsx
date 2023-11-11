@@ -1,6 +1,4 @@
 'use client'
-
-import Image from 'next/image';
 import styles from './navbar.module.css';
 import Link from 'next/link';
 import SignIn from './sign-in';
