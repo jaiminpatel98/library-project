@@ -18,3 +18,9 @@ interface User {
   photoUrl?: string,
   email?: string
 }
+
+interface Toast {
+  title: string,
+  message: string,
+  type: string
+}
