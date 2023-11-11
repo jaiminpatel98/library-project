@@ -5,6 +5,7 @@ import { uploadMedia } from "../utilities/firebase/functions";
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Bars } from  'react-loader-spinner';
 import UploadInput from '../components/upload-input';
+import Toast from '../components/toast';
 import styles from "./upload-form.module.css";
 
 export default function UploadForm() {
@@ -12,6 +13,8 @@ export default function UploadForm() {
   const [file, setFile] = useState<File>();
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
+  const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState<Toast>();
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newDescription = event.target.value;
@@ -29,21 +32,23 @@ export default function UploadForm() {
 
   const handleUpload = async () => {
     if (!file) {
-      //TODO: Display error feed - No file was selected
+      showToast('Warning', 'No file was selected.', 'warning');
       return;
     }
     setLoading(true);
     try {
-      //TODO: conditionally call upload function based on media type - video, audio, image
-      //TODO: Establish interfaces as global types - Video, Upload - then we can just send upload interface to the function
-      //TODO: Replace reponse feedback with styled toasts or similar
       const response = await uploadMedia(file, title, description);
-      alert(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
+      showToast('Success', `File uploaded successfully. Response: ${JSON.stringify(response)}`, 'success');
       setLoading(false);
     } catch (error) {
-      alert(`Failed to upload file: ${error}`);
+      showToast('Error', `Failed to upload file: ${error}`, 'error');
       setLoading(false);
     }
+  }
+
+  const showToast = (title: string, message: string, type: string) => {
+    setToast({title, message, type});
+    setOpen(true);
   }
 
   return (
@@ -106,6 +111,7 @@ export default function UploadForm() {
           visible={true}
         />
       }
+      <Toast open={open} setOpen={setOpen} details={toast}/>
     </Fragment>
   )
 }
