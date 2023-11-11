@@ -222,7 +222,7 @@
 .ToastRoot.error {
   background-color: var(--red-5);
 }
-.ToastRoot.
+
 .ToastRoot[data-state='open'] {
   animation: slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
