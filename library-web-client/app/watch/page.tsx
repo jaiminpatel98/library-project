@@ -7,11 +7,14 @@ import { getMediaById } from "../utilities/firebase/functions";
 import { getUser } from "../utilities/firebase/functions";
 import { Bars } from  'react-loader-spinner';
 import Link from 'next/link';
+import Toast from '../components/toast';
 
 export default function Watch() {
   const [data, setData] = useState<Media>();
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState<Toast>();
 
   const videoPrefix = 'https://storage.googleapis.com/library-processed-videos/';
   const audioPrefix = 'https://storage.googleapis.com/library-audios/';
@@ -39,16 +42,15 @@ export default function Watch() {
             })
             .catch((error) => {
               setLoading(false);
-              console.log(error)
+              showToast('Error', `Failed to retrieve user: ${error.message}`, 'error');
             })
           }
           setLoading(false);
         }
-        console.log(res)
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error)
+        showToast('Error', `Failed to retrieve media: ${error.message}`, 'error');
       })
     }
   })
@@ -61,6 +63,11 @@ export default function Watch() {
   const getUserHelper = async (docId: string) => {
     const data = await getUser(docId);
     return data;
+  }
+
+  const showToast = (title: string, message: string, type: string) => {
+    setToast({title, message, type});
+    setOpen(true);
   }
   
   return (
@@ -90,7 +97,7 @@ export default function Watch() {
                   src={user?.photoUrl}
                   alt={user?.name + 'profile image'}
                 />
-                <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                <Avatar.Fallback className="AvatarFallback">
                   {user?.name?.split(' ')[0][0]}
                 </Avatar.Fallback>
               </Avatar.Root>
@@ -118,6 +125,7 @@ export default function Watch() {
           />
         </div>
       }
+      <Toast open={open} setOpen={setOpen} details={toast}/>
     </div>
   );
 }
