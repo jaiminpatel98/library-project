@@ -3,12 +3,16 @@
   border-radius: 8%;
 }
 
+.filter {
+  margin: 2.5% 5% 1% 7%;
+}
+
 .items {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 90%;
-  margin: 2.5% 5% 5% 7%;
+  margin: 0 5% 5% 7%;
 }
 
 .item {
@@ -17,4 +21,8 @@
 }
 .item:hover {
   text-decoration: underline;
+}
+
+.loading {
+  margin-top: 2.5%;
 }
