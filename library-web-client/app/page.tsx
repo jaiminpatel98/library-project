@@ -38,6 +38,7 @@ export default function Home() {
     setToast({title, message, type});
     setOpen(true);
   }
+  
   return (
     <main>
       <div className={styles.filter}>
