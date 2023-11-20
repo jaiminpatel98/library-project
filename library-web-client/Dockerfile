@@ -2,7 +2,7 @@ FROM node:18 AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json next.config.js ./
 
 RUN npm install
 
@@ -14,7 +14,7 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json next.config.js ./
 
 RUN npm install --only=production
 
