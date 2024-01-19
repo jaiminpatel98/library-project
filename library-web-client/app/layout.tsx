@@ -6,7 +6,7 @@ import Navbar from './navbar/navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Library App',
+  title: 'Hillside Garden',
   description: 'File library web application',
 }
 
