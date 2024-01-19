@@ -39,6 +39,7 @@ export default function User() {
             <img src={user.photoUrl} height={360}/>
           }
           <p>{user ? user.bio : ''}</p>
+          <a href="https://open.spotify.com/artist/2PvuSMyBJ31yIdjkhsrEN7?si=FM1hT_hISpC19hfZCLu8xw">{user?.email === 'jaiminpatel98@gmail.com' ? 'Hillside Garden' : ''}</a>
         </div>
       }
       {
