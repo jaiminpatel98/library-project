@@ -28,9 +28,9 @@ export default function Navbar() {
         </svg>
       </Link>
       <div className={styles.right}>
-        {/* {
-          user && <UploadForm />
-        } */}
+        {
+          user && user.email==='jaiminpatel98@gmail.com' && <UploadForm />
+        }
         {
           user &&
           <Link className={styles.name} href={`/user?u=${user?.uid}`} key={user?.uid}>
